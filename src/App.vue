@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 const nome = ref('')
 const data = ref('')
 const email = ref('')
@@ -8,17 +8,34 @@ const cidade = ref('')
 const estado = ref('')
 const Hobbie = ref([])
 const linguagem = ref('')
-const biografia = ref('')
+const Biografia = ref('')
 const senha = ref('')
 const confirma = ref('')
 const ok = ref(false)
+const confirmarSenha = ref('')
+
+
+const mensagemErro = computed(() => {
+  if (senha.value != confirmarSenha.value) {
+    return 'As senhas devem ser iguais'
+  } else {
+    return ''
+  }
+})
+function confirmacao() {
+  if (senha.value === confirmarSenha.value) {
+    return true;
+  } else {
+    return false
+  }
+}
 </script>
 
 <template>
 
   <div>
     <div class = "box">
-      <form action="">
+      <form @submit.prevent="ok = confirmacao()">
        <fieldset>
         <legend>Formulário</legend>
         <button>Nome:</button>
@@ -31,10 +48,11 @@ const ok = ref(false)
        <input type="password" v-on:keypress="ok=false" v-model="senha" placeholder="Digite sua senha"  class="labelImput" />
        <hr>
        <button>Confirmação de senha:</button>
-       <input type="password" v-on:keypress="ok=false" v-model="confirma" placeholder="Digite sua senha novamente"  class="labelImput" />
+       <input type="password" v-on:keypress="ok=false" v-model="confirmarSenha" placeholder="Digite sua senha novamente"  class="labelImput" />
+       <p>{{ mensagemErro }}</p>
        <hr>
        <button>Data de nascimento:</button>
-       <input type="text" v-on:keypress="ok=false" v-model="data" placeholder="Digite sua data"  class="labelImput" />
+       <input type="date" v-on:keypress="ok=false" v-model="data" placeholder="Digite sua data"  class="labelImput" />
        <hr>
        <button>Endereço:</button>
        <input type="text" v-on:keypress="ok=false" v-model="endereco" placeholder="Digite seu endereço"  class="labelImput" />
@@ -43,7 +61,6 @@ const ok = ref(false)
        <input type="text" v-on:keypress="ok=false" v-model="cidade" placeholder="Digite sua cidade"  class="labelImput" />
        <hr>
        <button>Hobbie:</button>
-       <input type="text" v-on:keypress="ok=false" v-model="Hobbie" placeholder="Digite seu hobbie"  class="labelImput" />
         <div>
           <label for="Esportes">Esportes</label>
           <input type="checkbox" v-model="Hobbie" value="Esportes" />;
@@ -99,7 +116,7 @@ const ok = ref(false)
           id="avatarField"
           @change="handleFileUpload($event)"/>
           <hr>
-       <p><button @click="ok = !ok">Mostrar</button></p>
+       <p><button type="submit">Mostrar</button></p>
        <hr>
        </fieldset>
       </form>
@@ -109,14 +126,14 @@ const ok = ref(false)
     <p>O seu nome é: {{ nome }}</p>
     <p>O seu email é: {{ email }}</p>
     <p>A sua senha é: {{ senha }}</p>
-    <p>A sua confirmação de senha é: {{ confirma }}</p> 
+    <p>A sua confirmação de senha é: {{ confirmarSenha }}</p> 
     <p>A sua data de nascimento é: {{ data }}</p>
     <p>O seu endereço é: {{ endereco }}</p>
     <p>A sua cidade é: {{ cidade }}</p>
     <p>O seu estado é: {{ estado }}</p>
-    <p>O seu hobbie é: {{ hobbie }}</p>
+    <p>O seu hobbie é: {{ Hobbie }}</p>
     <p>A sua linguagem de programação é: {{ linguagem }}</p>
-    <p>A sua biografia é: {{ biografia }}</p>
+    <p>A sua biografia é: {{ Biografia }}</p>
   </div>
 </template>
 <style>
@@ -127,7 +144,7 @@ body{
 .box{
   color: white;
   position: absolute;
-  top: 50%;
+  top: 60%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: rgb(0, 0, 0, 0.8);
